@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+      text-align: center;
+      padding: 50px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px;
+    }
+    #weather {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Weather App</h1>
+
+  <input type="text" id="city-input" placeholder="Enter City Name" />
+  <button id="get-weather-btn">Get Weather</button>
+
+  <div id="weather">
+    <p id="temperature"></p>
+    <p id="description"></p>
+  </div>
+
+  <script>
+    document.getElementById('get-weather-btn').addEventListener('click', async function() {
+      const city = document.getElementById('city-input').value;
+
+      if (!city) {
+        alert('Please enter a city name');
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:3000/weather?city=${city}`);
+        const data = await response.json();
+
+        if (data.error) {
+          alert(data.error);
+          return;
+        }
+
+        document.getElementById('temperature').innerText = `Temperature: ${data.temperature}°C`;
+        document.getElementById('description').innerText = `Condition: ${data.description}`;
+      } catch (error) {
+        console.error('Error fetching weather data:', error);
+      }
+    });
+  </script>
+
+</body>
+</html>
+
